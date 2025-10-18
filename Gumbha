@@ -1,0 +1,792 @@
+--[[
+ This property is protected.
+ You are not allowed to claim this as your own.
+ Removal of initial credits to the authors is prohibited.
+]]
+
+repeat
+ task.wait()
+until game:IsLoaded()
+
+  --Stops script if on a different game
+if game.PlaceId ~= 8737602449 and game.PlaceId ~= 8943844393 then
+ return
+end
+
+local identifyexecutor = identifyexecutor or function() return 'Unknown' end
+local cloneref = (identifyexecutor() ~= "Synapse Z" and not identifyexecutor():find("Codex") and cloneref) or function(o) return o end -- infinite yield
+local CoreGui = cloneref(game:GetService("CoreGui"))
+local Players = cloneref(game:GetService("Players"))
+local HttpService = cloneref(game:GetService("HttpService"))
+local TPService = cloneref(game:GetService("TeleportService"))
+local PathfindingService = cloneref(game:GetService("PathfindingService"))
+local ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"))
+if not workspace then
+ workspace = game:GetService('Workspace')
+end
+local Remotes
+
+for i,v in next, ReplicatedStorage:GetChildren() do
+   if v.Name:find('Remote') and v.IsA(v, 'ModuleScript') then
+       local suc = pcall(function()
+           require(v).Event('PromotionBlimpGiftbux'):FireServer()
+       end)
+       if suc then 
+           Remotes = require(v)
+           break
+       end
+   end
+   task.wait()
+end
+
+--skidded!!! ty tvk1308
+--[[for k, v in pairs(getgc(true)) do
+ if pcall(function()
+  return rawget(v, "indexInstance")
+ end) and type(rawget(v, "indexInstance")) == "table" and  (rawget(v, "indexInstance"))[1] == "kick" then
+  v.tvk = {
+   "kick",
+   function()
+    return workspace:WaitForChild(HttpService:GenerateGUID(true))
+   end
+  }
+ end
+end]]
+
+local xspin = 0
+local nx = 0
+
+local fonts = {
+ "AmaticSC",
+ "Antique",
+ "Arcade",
+ "Arial",
+ "ArialBold",
+ "Bangers",
+ "Bodoni",
+ "Cartoon",
+ "Code",
+ "Creepster",
+ "DenkOne",
+ "Fantasy",
+ "Fondamento",
+ "FredokaOne",
+ "Garamond",
+ "Gotham",
+ "GothamBlack",
+ "GothamBold",
+ "GothamMedium",
+ "GrenzeGotisch",
+ "Highway",
+ "IndieFlower",
+ "JosefinSans",
+ "Jura",
+ "Kalam",
+ "Legacy",
+ "LuckiestGuy",
+ "Merriweather",
+ "Michroma",
+ "Nunito",
+ "Oswald",
+ "PatrickHand",
+ "PermanentMarker",
+ "Roboto",
+ "RobotoCondensed",
+ "RobotoMono",
+ "Sarpanch",
+ "SciFi",
+ "SourceSans",
+ "SourceSansBold",
+ "SourceSansItalic",
+ "SourceSansLight",
+ "SourceSansSemibold",
+ "SpecialElite",
+ "TitilliumWeb",
+ "Ubuntu"
+}
+
+if getgenv().loadedRR then
+ return
+else
+ getgenv().loadedRR = true
+end
+
+task.wait()
+
+--Anti-AFK
+local connections = getconnections or get_signal_cons or nil
+task.spawn(function()
+ if --[[connections and not identifyexecutor():find('Codex')]] false then
+  for a, b in next, connections(Players.LocalPlayer.Idled) do
+   b:Disable()
+  end
+ else
+  local bb = game:GetService("VirtualUser")
+  Players.LocalPlayer.Idled:Connect(function()
+      bb:CaptureController()
+      bb:ClickButton2(Vector2.new())
+  end)
+ end
+end)
+
+local _CFRAMETABLE = {{166.584, 3.47699, 371.398},{228.765, 3.57067, 332.55},{225.878, 3.57066, 274.96},{169.654, 4.11481, 232.826},{102.625, 3.57066, 274.941},{109.353, 3.57066, 351.28}, {166.584, 3.47699, 371.399}}
+local unclaimed = {}
+local mainCheckPosition = Vector3.new(165.161,0,311.636)
+local donation, boothText, spamming, hopTimer, vcEnabled
+local errCount = 0
+local uid = Players.LocalPlayer.UserId
+local newRaisedFormat = Players.LocalPlayer:WaitForChild('leaderstats'):WaitForChild('Raised')
+local queueonteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport) or nil
+local httprequest = (syn and syn.request) or http and http.request or http_request or (fluxus and fluxus.request) or request
+local httpservice = HttpService
+if queueonteleport then
+ queueonteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/CF-Trail/tzechco-PlsDonateAutofarmBackup/main/old.lua'))()")
+end
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/CF-Trail/tzechco-PlsDonateAutofarmBackup/main/UI"))()
+local _HIGHLIGHTLOADER
+pcall(function()
+     _HIGHLIGHTLOADER = loadstring(game:HttpGet('https://raw.githubusercontent.com/CF-Trail/tzechco-PlsDonateAutofarmBackup/main/hl.lib.lua'))()
+end)
+function forceServerHop()
+ --local isVip = game:GetService('RobloxReplicatedStorage').GetServerType:InvokeServer()
+ --if isVip == "VIPServer" then return end
+ local gameId
+ gameId = "8737602449"
+ local servers = {}
+ local req = httprequest({
+  Url = "https://games.roblox.com/v1/games/" .. gameId .. "/servers/Public?sortOrder=Desc&limit=100"
+ })
+ local body = httpservice:JSONDecode(req.Body)
+ if body and body.data then
+  for i, v in next, body.data do
+   if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing > 19 then
+    table.insert(servers, 1, v.id)
+   end
+  end
+ end
+ task.spawn(function()
+  while task.wait(0.5) do
+   if #servers > 0 then
+    TPService:TeleportToPlaceInstance(gameId, servers[math.random(1, #servers)], Players.LocalPlayer)
+   end
+  end
+ end)
+ TPService.TeleportInitFailed:Connect(function()
+  TPService:TeleportToPlaceInstance(gameId, servers[math.random(1, #servers)], Players.LocalPlayer)
+ end)
+end
+local settingsLock
+function saveSettings()
+ if not settingsLock then
+  local suc, er = pcall(function()
+   writefile('plsdonatesettings.txt', httpservice:JSONEncode(getgenv().settings))
+  end)
+  if not suc then
+   return warn('lol')
+  end
+ end
+end
+getgenv().settings = {}
+
+local sNames = {
+ "textUpdateToggle",
+ "textUpdateDelay",
+ "serverHopToggle",
+ "serverHopDelay",
+ "hexBox",
+ "goalBox",
+ "webhookToggle",
+ "webhookBox",
+ "danceChoice",
+ "thanksMessage",
+ "signToggle",
+ "customBoothText",
+ "signUpdateToggle",
+ "signText",
+ "signHexBox",
+ "autoThanks",
+ "autoBeg",
+ "begMessage",
+ "begDelay",
+ "fpsLimit",
+ "render",
+ "thanksDelay",
+ "vcServer",
+ "donationJump",
+ "AlternativeHop",
+ "autoNearReply",
+ "boothPosition",
+ "standingPosition",
+ "AnonymousMode",
+ "boothSwitcher",
+ "serverHopAfterDonation",
+ "jumpsPerRobux",
+ "staffHopA",
+ "spinSet",
+ "boothTop",
+ "spinSpeedMultiplier",
+ "webhookAfterSH",
+ "minimumDonated",
+ "webhookType",
+ "fpsBoost",
+ "fontFace",
+ "fontSize",
+ 'noFont',
+ 'taggedBoothHop',
+ 'rainbowText',
+ 'helloResponce',
+ 'botResponce',
+ "donateResponce",
+ "otherResponce",
+ "scamResponce",
+ "pingEveryone",
+ "pingAboveDono",
+ "removeHeadNametag",
+ "gravitySwitch",
+ "jumpBoost",
+ 'goalServerhopSwitch',
+ 'goalServerhopGoal',
+ 'highlightSwitch',
+ 'helicopterEnabled',
+ 'friendHop',
+ 'autoReplyNoRespond',
+ 'antiBotServers',
+    'robuxLap'
+}
+
+local positionX = (Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()):WaitForChild('HumanoidRootPart').Position
+
+local sValues = {
+ true,
+ 30,
+ true,
+ 15,
+ "#32CD32",
+ 5,
+ false,
+ "",
+ "Disabled",
+ {
+  "Thank you",
+  "Thanks!",
+  "ty :)",
+  "tysm!"
+ },
+ false,
+ "✅ 1R$ = +1 SPIN SPEED ✅",
+ false,
+ "your text here",
+ "#ffffff",
+ true,
+ true,
+ {
+  "1R$ = +1 SPIN SPEED",
+  "Spinning for donations!"
+ },
+ 300,
+ 60,
+ false,
+ 3,
+ false,
+ false,
+ false,
+ false,
+ 3,
+ 'Front',
+ false,
+ false,
+ false,
+ 1,
+ true,
+ true,
+ false,
+ 1,
+ false,
+ 0,
+ 'New',
+ false,
+ 'SciFi',
+ 5,
+ false,
+ false,
+ false,
+ {
+  'Hi',
+  'Sup',
+  'Hello'
+ },
+ {
+  'no im not',
+  'im not a bot'
+ },
+ {
+  "sorry im saving",
+  "i am saving for my dream item",
+  "sorry my robux is pending"
+ },
+ {
+  "..?",
+  "what",
+  "?"
+ },
+ {
+  "im no scam",
+  "im not a scammer",
+  "this is not a scam"
+ },
+ false,
+ 1000,
+ false,
+ false,
+ false,
+ false,
+ 0,
+ false,
+ false,
+ true,
+ false,
+ false,
+    false
+}
+
+  --Load Settings
+if isfile("plsdonatesettings.txt") then
+ local sl, er = pcall(function()
+  getgenv().settings = HttpService:JSONDecode(readfile('plsdonatesettings.txt'))
+ end)
+ if er ~= nil then
+  task.spawn(function()
+   errMsg = Instance.new("Hint")
+   errMsg.Parent = CoreGui
+   errMsg.Text = tostring("COULDNT LOAD SETTINGS BECAUSE OF DUMBASS JSON ERROR, SERVERHOPPING")
+   task.wait(15)
+   errMsg:Destroy()
+  end)
+  delfile("plsdonatesettings.txt")
+  task.wait(2)
+  getgenv().settings = HttpService:JSONDecode(readfile('plsdonatesettingsbackup.txt'))
+  saveSettings()
+  forceServerHop()
+  return
+ else
+  writefile('plsdonatesettingsbackup.txt', httpservice:JSONEncode(getgenv().settings))
+ end
+end
+
+if #getgenv().settings ~= sNames then
+ for i, v in ipairs(sNames) do
+  if getgenv().settings[v] == nil then
+   getgenv().settings[v] = sValues[i]
+  end
+ end
+ writefile('plsdonatesettings.txt', httpservice:JSONEncode(getgenv().settings))
+end
+
+local settingsLock = true
+local AllIDs = {}
+local foundAnything = ""
+local actualHour = os.date("!*t").hour
+local S_T = TPService
+local S_H = HttpService
+local RandomName = "PlsDonateServerHop-Temp"
+
+local File = pcall(function()
+ AllIDs = S_H:JSONDecode(readfile(RandomName .. ".json"))
+end)
+if not File then
+ table.insert(AllIDs, actualHour)
+ pcall(function()
+  writefile(RandomName .. ".json", S_H:JSONEncode(AllIDs))
+ end)
+
+end
+
+local vc = cloneref(game:GetService("VoiceChatService"))
+
+local success, enabled = pcall(function()
+ return vc:IsVoiceEnabledForUserIdAsync(uid)
+end)
+
+if success and enabled then
+ vcEnabled = true
+else
+ vcEnabled = false
+end
+
+-- *** MODIFIED: ensure local alias so settings usage doesn't nil-index
+local settings = getgenv().settings
+
+local function choosePlaceId()
+    if vcEnabled and settings.vcServer then
+        return 8943844393
+    elseif settings.AlternativeHop then
+        return (math.random() < 0.5) and 8943844393 or 8737602449
+    else
+        return 8737602449
+    end
+end
+
+-- *** MODIFIED SERVERHOP: single-attempt hop + scheduler-friendly controller
+local function hopOnce()
+    if not httprequest then return false end
+    local PlaceId = choosePlaceId()
+    local JobId = game.JobId
+
+    local ok, req = pcall(function()
+        return httprequest({
+            Url = string.format(
+                "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true",
+                PlaceId
+            )
+        })
+    end)
+    if not ok or not req or not req.Body then
+        return false
+    end
+
+    local suc, body = pcall(function() return HttpService:JSONDecode(req.Body) end)
+    if not suc or not body or not body.data then return false end
+
+    local servers = {}
+    for _, server in pairs(body.data) do
+        if type(server) == "table" and server.id and server.playing and server.maxPlayers then
+            if server.playing < server.maxPlayers and server.id ~= JobId then
+                table.insert(servers, server)
+            end
+        end
+    end
+
+    if #servers == 0 then return false end
+    local chosen = servers[math.random(1, #servers)]
+
+    pcall(function()
+        TPService:TeleportToPlaceInstance(PlaceId, chosen.id, Players.LocalPlayer)
+    end)
+    return true
+end
+
+-- scheduler controller
+local hopTask = nil
+local function startHopScheduler()
+    if hopTask and task.cancel then
+        pcall(task.cancel, hopTask)
+        hopTask = nil
+    end
+
+    if not settings.serverHopToggle then
+        return
+    end
+
+    hopTask = task.spawn(function()
+        while settings.serverHopToggle do
+            local delay = tonumber(settings.serverHopDelay) or 15
+            if delay < 0.5 then delay = 0.5 end
+            task.wait(delay * 60)
+            pcall(hopOnce)
+            task.wait(math.random(1,3))
+        end
+    end)
+end
+
+local function stopHopScheduler()
+    if hopTask and task.cancel then
+        pcall(task.cancel, hopTask)
+        hopTask = nil
+    end
+end
+
+function hopSet()
+    if settings.serverHopToggle then
+        startHopScheduler()
+    else
+        stopHopScheduler()
+    end
+end
+
+TPService.TeleportInitFailed:Connect(function()
+    task.wait(1)
+    pcall(hopOnce)
+end)
+-- *** END MODIFIED SERVERHOP
+
+local function serverHop()
+    while task.wait(1.5) do
+        if httprequest then
+            task.spawn(function()
+                local HttpService = game:GetService("HttpService")
+                local TeleportService = game:GetService("TeleportService")
+                local Players = game:GetService("Players")
+                local LocalPlayer = Players.LocalPlayer
+                local PlaceId = choosePlaceId()
+                local JobId = game.JobId
+
+                local req = httprequest({
+                    Url = string.format(
+                        "https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", 
+                        PlaceId
+                    )
+                })
+
+                local success, body = pcall(function()
+                    return HttpService:JSONDecode(req.Body)
+                end)
+
+                if success and body and body.data then
+                    local servers = {}
+
+                    for _, server in pairs(body.data) do
+                        if server.playing < server.maxPlayers and server.id ~= JobId then
+                            table.insert(servers, server)
+                        end
+                    end
+
+                    if #servers > 0 then
+                        local selectedServer = servers[math.random(1, #servers)]
+                        pcall(function()
+                            TeleportService:TeleportToPlaceInstance(PlaceId, selectedServer.id, LocalPlayer)
+                        end)
+                    end
+                end
+            end)
+        end
+    end
+end
+
+
+function waitServerHop()
+ task.wait(getgenv().settings.serverHopDelay * 60)
+ serverHop()
+end
+
+local function hopSet()
+ if hopTimer then
+  task.cancel(hopTimer)
+ end
+ if getgenv().settings.serverHopToggle then
+  hopTimer = task.spawn(waitServerHop)
+ end
+end
+
+local function playerChecker(player)
+ return
+end
+
+local function twn(...)
+ return cloneref(game:GetService('TweenService')):Create(...)
+end
+
+local function oldWebhook(msg)
+ if getgenv().settings.webhookBox:gsub(' ', '') == '' then
+  return
+ end
+ pcall(function()
+  httprequest({
+   Url = getgenv().settings.webhookBox:gsub(' ', ''),
+   Body = httpservice:JSONEncode({
+    ["content"] = msg
+   }),
+   Method = "POST",
+   Headers = {
+    ["content-type"] = "application/json"
+   }
+  })
+ end)
+end
+
+local sliderInProgress = false;
+local function slider(value, whichSlider)
+ if sliderInProgress then
+  return
+ end
+ sliderInProgress = true
+ task.wait(5)
+ if getgenv().settings[whichSlider] == value then
+  saveSettings()
+  sliderInProgress = false;
+  if whichSlider == "serverHopDelay" then
+   hopSet()
+  end
+ else
+  sliderInProgress = false;
+  return slider(getgenv().settings[whichSlider], whichSlider)
+ end
+end
+
+local _shuffled = workspace:WaitForChild('MapUI',3)
+local _shufflerandom = 0
+if not _shuffled then
+   _shufflerandom = 1
+end
+local _boothlocation
+if _shufflerandom == 1 then
+ pcall(function()
+    _boothlocation = Players.LocalPlayer:WaitForChild('PlayerGui',5):WaitForChild('MapUIContainer',5):WaitForChild('MapUI',5)
+ end)
+else
+   _boothlocation = _shuffled or workspace:WaitForChild('MapUI')
+end
+
+if not _boothlocation then
+ return serverHop()
+end
+
+local function formatNumber(n)
+    if n == 420 or n == 425 then
+        n = n + 10
+    end
+    if n >= 10000 then
+        return string.format("%.1fk", n / 1000)
+    elseif n >= 1000 then
+        return string.format("%.2fk", n / 1000)
+    else
+        return tostring(n)
+    end
+end
+
+function updateBoothText()
+    if not (settings.textUpdateToggle and settings.customBoothText) then
+        return
+    end
+
+    local currentRaw = tonumber(newRaisedFormat.Value)
+    local goalRaw    = currentRaw + tonumber(settings.goalBox)
+
+    local currentStr = formatNumber(currentRaw)
+    local goalStr    = formatNumber(goalRaw)
+
+    local text = settings.customBoothText
+        :gsub("%$C", currentStr)
+        :gsub("%$G", goalStr)
+        :gsub("%$JPR", tostring(settings.jumpsPerRobux))
+
+    local boothUI = _boothlocation.BoothUI:FindFirstChild("BoothUI" .. unclaimed[2])
+    if not boothUI then return end
+    local signLabel = boothUI.Sign.TextLabel
+
+    if signLabel.Text == text then
+        return
+    end
+
+    if signLabel.Text:find("##") and settings.taggedBoothHop and nx >= 1 then
+        return serverHop()
+    end
+
+    local basePayload = {
+        textFont         = Enum.Font[settings.fontFace],
+        richText         = true,
+        strokeColor      = Color3.new(0, 0, 0),
+        strokeOpacity    = 0,
+        textColor        = rgb(settings.hexBox),
+        buttonStrokeColor= Color3.new(0, 0, 0),
+        buttonTextColor  = Color3.new(1, 1, 1),
+        buttonColor      = Color3.new(98, 255, 0),
+        buttonHoverColor = Color3.new(98, 255, 0),
+        buttonLayout     = ""
+    }
+    basePayload.text = text
+    Remotes.Event("SetCustomization"):FireServer(basePayload, "booth")
+end
+
+local _TTSERVICE = cloneref(game:GetService('TextChatService'))
+local _TCHANNEL = _TTSERVICE.TextChannels.RBXGeneral
+
+local function chat(C_1)
+ _TCHANNEL:SendAsync(C_1)
+end
+
+local function begging()
+ while getgenv().settings.autoBeg do
+  chat(getgenv().settings.begMessage[math.random(#getgenv().settings.begMessage)])
+  task.wait(getgenv().settings.begDelay)
+ end
+end
+
+local function fetchNearPlr()
+ local minmagnif,plrfoundf
+ local lplrChar = Players.LocalPlayer.Character
+ if lplrChar then
+  local humanoidthing = lplrChar:FindFirstChildOfClass('Humanoid')
+  if humanoidthing then
+   local roothum = humanoidthing.RootPart
+   if roothum then
+    minmagnif = 9999999
+    plrfoundf = nil
+    for i,v in next, Players:GetPlayers() do
+     if v == Players.LocalPlayer then
+      continue
+     end
+     if v.Character and v.Character:FindFirstChildOfClass('Humanoid') then
+      local randomplrroot = v.Character:FindFirstChildOfClass('Humanoid').RootPart
+      if randomplrroot then
+       local cmagnif = (randomplrroot.Position - roothum.Position).Magnitude
+       if cmagnif < minmagnif then
+        minmagnif = cmagnif
+        plrfoundf = v
+       end
+      end
+     end
+    end
+   end
+  end
+ end
+ return plrfoundf
+end
+
+local function webhook(raised, donor)
+    local url = getgenv().settings.webhookBox:match("%S+")
+    if not url or url == "" then
+        return
+    end
+    local embed = {
+        title       = Players.LocalPlayer.Name .. " 💸 just got donated!",
+        description = string.format(
+            "**%d R$** by **%s**\n• A/T: %d R$\n• Total: %d R$",
+            raised,
+            donor,
+            math.floor(raised * 0.6),
+            tonumber(Players.LocalPlayer.leaderstats.Raised.Value)
+        ),
+        color       = 0x2ECC71,
+        thumbnail   = {
+            url = ("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=256&height=256&format=png")
+                  :format(Players.LocalPlayer.UserId)
+        },
+        timestamp   = os.date("!%Y-%m-%dT%H:%M:%SZ")
+    }
+    local payload = HttpService:JSONEncode({ embeds = { embed } })
+    httprequest({
+        Url     = url,
+        Method  = "POST",
+        Headers = { ["Content-Type"] = "application/json" },
+        Body    = payload
+    })
+    if getgenv().settings.pingEveryone and raised >= tonumber(getgenv().settings.pingAboveDono) then
+        httprequest({
+            Url     = url,
+            Method  = "POST",
+            Headers = { ["Content-Type"] = "application/json" },
+            Body    = HttpService:JSONEncode({ content = "@everyone" })
+        })
+    end
+end
+
+local function hex(c3)
+ local r, g, b = math.floor(c3.R * 255), math.floor(c3.G * 255), math.floor(c3.B * 255)
+ return string.format("#%02X%02X%02X", r, g, b)
+end
+
+function rgb(hex)
+ hex = hex:gsub("#", "")
+ local r, g, b = tonumber("0x" .. hex:sub(1, 2)), tonumber("0x" .. hex:sub(3, 4)), tonumber("0x" .. hex:sub(5, 6))
+ return Color3.new(r, g, b)
+end
+
+if CoreGui:FindFirstChild('RobloxPromptGui') then
+ for i, v in next, CoreGui.RobloxPromptGui:GetDescendants() do
+  if v:IsA('TextLabel') and string.find(string.lower(v.Text), "ban") then
+   oldWebhook('@everyone ||' .. Players.LocalPlayer.Name .. '|| got banned' .. v.Text:gsub("You've been banned", ''):gsub('You were kicked from this experience:', ''):gsub('(Error Code: 267)', ''):gsub('()', ''))
+  end
+ end
+end
+
+if CoreGu
